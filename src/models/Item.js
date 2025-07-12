@@ -20,6 +20,7 @@ const ItemSchema = new Schema(
       min: 0,
     },
     images: { 
+      
       type: [String],
       required: true,
       validate: {
