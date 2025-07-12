@@ -21,7 +21,7 @@ export default function AddItemPage() {
     size: "",
     condition: "",
     tags: "",
-    points_value: 50,
+    points_value: 50, 
   })
   const router = useRouter()
 
