@@ -5,9 +5,9 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Upload, X } from "lucide-react"
-import Header from "@/components/header"
-import { supabase } from "@/lib/supabase"
-import { getCurrentUser } from "@/lib/auth"
+import Header from "../../components/header"
+import { supabase } from "../../lib/supabase"
+import { getCurrentUser } from "../../lib/auth"
 
 export default function AddItemPage() {
   const [currentUser, setCurrentUser] = useState<any>(null)
@@ -21,7 +21,7 @@ export default function AddItemPage() {
     size: "",
     condition: "",
     tags: "",
-    points_value: 50,
+    points_value: 50, 
   })
   const router = useRouter()
 
@@ -30,15 +30,15 @@ export default function AddItemPage() {
   const sizes = ["XS", "S", "M", "L", "XL", "XXL", "One Size"]
 
   useEffect(() => {
-    const checkUser = async () => {
-      const user = await getCurrentUser()
-      if (!user) {
-        router.push("/auth/login")
-        return
-      }
-      setCurrentUser(user)
-    }
-    checkUser()
+    // const checkUser = async () => {
+    //   const user = await getCurrentUser()
+    //   if (!user) {
+    //     router.push("/auth/login")
+    //     return
+    //   }
+    //   setCurrentUser(user)
+    // }
+    // checkUser()
   }, [router])
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
