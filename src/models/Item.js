@@ -8,6 +8,11 @@ const ItemSchema = new Schema(
       trim: true,
       maxlength: 100,
     },
+    status: {
+      type: String,
+      enum: ["available", "pending"],
+      default: "pending",
+    },
     description: {
       type: String,
       required: true,
@@ -19,17 +24,9 @@ const ItemSchema = new Schema(
       required: true,
       min: 0,
     },
-    images: { 
-      
+    images: {
       type: [String],
-      required: true,
-      validate: {
-        validator: function (array) {
-
-          return array.length > 0;
-        },
-        message: "At least one image is required",
-      },
+      default: [],
     },
     condition: {
       type: String,
