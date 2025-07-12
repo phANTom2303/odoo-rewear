@@ -1,4 +1,4 @@
-# 🌟 Odoo ReWear - Sustainable Fashion Exchange Platform
+# 🌟 Odoo ReWear - Community Clothing Exchange
 
 <div align="center">
   <img src="https://img.shields.io/badge/Next.js-14.0+-black?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js">
@@ -268,9 +268,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 👨‍💻 **Developer**
+## 👨‍💻 **Developers**
 
-**GitHub:** [@phANTom2303](https://github.com/phANTom2303) [@VanXodus305](https://github.com/VanXodus305) [@sakettt25](https://github.com/sakettt25) [@jaspreetjk20](https://github.com/jaspreetjk20)
+- **Anish Goenka** - anikavygoenka@gmail.com | [@phANTom2303](https://github.com/phANTom2303)
+- **Soumyadeep Kundu** - 2305820@kiit.ac.in | [@VanXodus305](https://github.com/VanXodus305)
+- **Saket Saurav** - saketsauravcse@gmail.com | [@sakettt25](https://github.com/sakettt25)
+- **Jaspreet Kaur** - jaspreetsk.2020@gmail.com | [@jaspreetjk20](https://github.com/jaspreetjk20)
 
 ---
 
