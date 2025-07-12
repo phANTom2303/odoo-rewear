@@ -27,7 +27,7 @@ export async function GET(request) {
     const search = searchParams.get("search");
 
     // Build query object
-    let query = {};
+    let query = { status: "available" }; // Only show available items
 
     // Add category filter
     if (category && category !== "all") {

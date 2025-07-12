@@ -60,14 +60,14 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link
-              href="/browse"
-              className="text-neutral-600 hover:text-primary-600 transition-colors"
-            >
-              Browse Items
-            </Link>
             {user && (
               <>
+                <Link
+                  href="/browse"
+                  className="text-neutral-600 hover:text-primary-600 transition-colors"
+                >
+                  Browse Items
+                </Link>
                 <Link
                   href="/dashboard"
                   className="text-neutral-600 hover:text-primary-600 transition-colors"
@@ -158,16 +158,16 @@ export default function Header() {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-neutral-200">
             <div className="flex flex-col space-y-4">
-              <Link
-                href="/browse"
-                className="text-neutral-600 hover:text-primary-600 transition-colors"
-              >
-                Browse Items
-              </Link>
               {loading ? (
                 <div className="text-neutral-400">Loading...</div>
               ) : user ? (
                 <>
+                  <Link
+                    href="/browse"
+                    className="text-neutral-600 hover:text-primary-600 transition-colors"
+                  >
+                    Browse Items
+                  </Link>
                   <div className="flex items-center space-x-3 py-2">
                     {user.image ? (
                       <img

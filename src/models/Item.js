@@ -10,7 +10,7 @@ const ItemSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["available", "pending"],
+      enum: ["available", "pending", "rejected"],
       default: "pending",
     },
     description: {
