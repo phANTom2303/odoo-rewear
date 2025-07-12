@@ -31,7 +31,6 @@ To reduce fashion waste and promote sustainable consumption by creating a commun
 - **User Registration & Authentication** - Secure user accounts with profile management
 - **Role-Based Access Control** - Customer and Admin user types
 - **Points System** - Earn and spend points for transactions
-- **User Ratings** - Community-driven trust system
 
 ### 👕 **Item Management**
 
@@ -45,7 +44,7 @@ To reduce fashion waste and promote sustainable consumption by creating a commun
 
 - **Initiate Swap Requests** - Propose item exchanges with other users
 - **Item Selection Modal** - Choose from your available items to offer
-- **Real-time Status Tracking** - Monitor pending, accepted, and rejected swaps
+- **Status Tracking** - Monitor pending, accepted, and rejected swaps
 - **Bilateral Negotiations** - Accept or reject incoming swap requests
 - **Swap History** - Complete transaction history and status updates
 
@@ -271,7 +270,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 **Developer**
 
-**GitHub:** [@phANTom2303](https://github.com/phANTom2303)
+**GitHub:** [@phANTom2303](https://github.com/phANTom2303) [@VanXodus305](https://github.com/VanXodus305) [@sakettt25](https://github.com/sakettt25) [@jaspreetjk20](https://github.com/jaspreetjk20)
 
 ---
 
