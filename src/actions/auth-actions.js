@@ -1,6 +1,6 @@
 "use server";
 
-import { signIn } from "../utils/auth";
+import { auth } from "../utils/auth";
 import { redirect } from "next/navigation";
 
 export async function signInAsCustomer() {
@@ -15,4 +15,8 @@ export async function signInAsCustomer() {
     console.error("Customer sign-in error:", error);
     throw error;
   }
+}
+
+export async function checkSession() {
+  return await auth();
 }
