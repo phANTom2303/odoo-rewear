@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { ArrowRight, Recycle, Users, Award, ChevronLeft, ChevronRight, Leaf } from "lucide-react"
-//import Header from "@/components/header"
+import Header from "../components/header"
 
 export default function HomePage() {
   const featuredItems = [
@@ -36,7 +36,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50">
-      {/* <Header /> */}
+      <Header />
 
       {/* Hero Section */}
       <section className="relative py-20 px-4 sm:px-6 lg:px-8">
@@ -51,6 +51,13 @@ export default function HomePage() {
               reducing waste and building a sustainable wardrobe.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              {/* <Link href="/auth/signup" className="btn-primary text-lg px-8 py-3 inline-flex items-center">
+                Sign Up
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link> */}
+              {/* <Link href="/auth/login" className="btn-outline text-lg px-8 py-3">
+                Login
+              </Link> */}
               <Link href="/browse" className="btn-primary text-lg px-8 py-3 inline-flex items-center">
                 Start Swapping
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -146,13 +153,13 @@ export default function HomePage() {
           <p className="text-xl text-primary-100 mb-8">
             Join thousands of fashion lovers making sustainable choices every day
           </p>
-          <Link
+          {/* <Link
             href="/auth/signup"
             className="bg-white text-primary-600 hover:bg-neutral-50 font-medium py-3 px-8 rounded-lg transition-colors duration-200 inline-flex items-center"
           >
             Get Started Today
             <ArrowRight className="ml-2 h-5 w-5" />
-          </Link>
+          </Link> */}
         </div>
       </section>
 
