@@ -1,10 +1,25 @@
-"use client";
-import { useEffect, useState } from "react";
+// app/your-page-name/page.jsx
 
-export default function Productpage() {
-  const [item, setItem] = useState(null);
+// (Optional) If you need client-side interactivity like useState, useEffect, or event handlers
+// uncomment the line below. If it's a static page or only fetches data on the server, keep it commented.
+// "use client";
 
-  useEffect(() => {
+import Head from 'next/head'; // For managing document head (title, meta tags)
+import Productpage from './product-page';
+// You can fetch data directly in a Server Component (default for pages in app router)
+// or use client-side fetching within a "use client" component.
+
+// Example of data fetching in a Server Component:
+async function getData() {
+  // Simulate a delay for fetching data
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  return {
+    title: "My Awesome Next.js Page",
+    content: "Welcome to my Next.js template page!",
+    items: ["Item 1", "Item 2", "Item 3"]
+  };
+}
+
     const mockData = {
       name: "Vintage Denim Jacket",
       description: "A classic blue denim jacket with a comfortable fit and timeless style.",
@@ -22,86 +37,58 @@ export default function Productpage() {
       category: "unisex"
     };
 
-    setItem(mockData);
-  }, []);
-
-  if (!item) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-neutral-50">
-        <span className="text-lg text-neutral-500">Loading...</span>
-      </div>
-    );
-  }
+export default async function YourPageName() {
+  const data = await getData(); // Data fetched on the server
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 py-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Product Displayed */}
-        <div className="flex flex-col md:flex-row gap-8 bg-white rounded-2xl shadow p-6 mb-12">
-          <div className="w-full md:w-1/2 flex items-center justify-center bg-neutral-100 rounded-xl overflow-hidden min-h-[250px]">
-            <img
-              src={item.images[0]}
-              alt={item.name}
-              className="w-full h-72 object-cover rounded-xl"
-            />
-          </div>
-          <div className="w-full md:w-1/2 flex flex-col justify-between">
-            <div>
-              <h2 className="text-3xl font-bold text-neutral-900 mb-2">{item.name}</h2>
-              <p className="text-neutral-600 mb-4">{item.description}</p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {item.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="inline-block bg-primary-100 text-primary-700 px-3 py-1 rounded-full text-xs font-semibold"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="space-y-2">
-              <p>
-                <span className="font-semibold text-neutral-700">Condition:</span>{" "}
-                <span className="capitalize">{item.condition}</span>
-              </p>
-              <p>
-                <span className="font-semibold text-neutral-700">Size:</span> {item.size}
-              </p>
-              <p>
-                <span className="font-semibold text-neutral-700">Cost:</span>{" "}
-                <span className="text-primary-600 font-bold text-lg">{item.cost} points</span>
-              </p>
-            </div>
-            {/* Added Buttons Section */}
-            <div className="mt-6 flex flex-col sm:flex-row gap-4">
-              <button className="flex-1 bg-primary-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary-700 transition-colors duration-200 shadow-md">
-                Buy with Points
-              </button>
-              <button className="flex-1 bg-neutral-200 text-neutral-800 font-semibold py-3 px-6 rounded-lg hover:bg-neutral-300 transition-colors duration-200 shadow-md">
-                Initiate Swap
-              </button>
-            </div>
-          </div>
-        </div>
+    // The outermost div often acts as the main layout container
+    <div className="container mx-auto p-4">
+      <Productpage item={mockData}/>
+      {/* Head component for SEO and browser tab title */}
+      <Head>
+        <title>{data.title}</title>
+        <meta name="description" content="A template for a Next.js page." />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-        {/* Alternate Images */}
-        <h3 className="text-xl font-semibold text-neutral-900 mb-4">More Images</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-          {item.images.slice(1).map((imgSrc, idx) => (
-            <div
-              key={idx}
-              className="bg-white rounded-xl shadow flex items-center justify-center h-40 overflow-hidden"
-            >
-              <img
-                src={imgSrc}
-                alt={`Alternate view ${idx + 1}`}
-                className="w-full h-full object-cover rounded-xl"
-              />
-            </div>
-          ))}
+      {/* Main content of the page */}
+      <main className="my-8">
+        <h1 className="text-4xl font-bold text-center mb-6">
+          {data.title}
+        </h1>
+
+        <p className="text-lg text-gray-700 text-center mb-8">
+          {data.content}
+        </p>
+
+        <section className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-semibold mb-4">Featured Items:</h2>
+          <ul className="list-disc list-inside space-y-2">
+            {data.items.map((item, index) => (
+              <li key={index} className="text-gray-800">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* Example of a button that could trigger client-side logic if "use client" is enabled */}
+        {/*
+        <div className="text-center mt-8">
+          <button
+            onClick={() => alert('Button clicked!')}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Click Me (Client-Side)
+          </button>
         </div>
-      </div>
+        */}
+      </main>
+
+      {/* Optional: Footer section */}
+      <footer className="text-center mt-12 text-gray-500 text-sm">
+        <p>&copy; {new Date().getFullYear()} Your Company Name. All rights reserved.</p>
+      </footer>
     </div>
   );
 }
