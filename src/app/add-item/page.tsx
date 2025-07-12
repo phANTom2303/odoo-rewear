@@ -30,15 +30,15 @@ export default function AddItemPage() {
   const sizes = ["XS", "S", "M", "L", "XL", "XXL", "One Size"]
 
   useEffect(() => {
-    const checkUser = async () => {
-      const user = await getCurrentUser()
-      if (!user) {
-        router.push("/auth/login")
-        return
-      }
-      setCurrentUser(user)
-    }
-    checkUser()
+    // const checkUser = async () => {
+    //   const user = await getCurrentUser()
+    //   if (!user) {
+    //     router.push("/auth/login")
+    //     return
+    //   }
+    //   setCurrentUser(user)
+    // }
+    // checkUser()
   }, [router])
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
