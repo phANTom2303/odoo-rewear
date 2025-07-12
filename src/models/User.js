@@ -21,6 +21,8 @@ const UserSchema = new Schema(
       min: 0,
     },
     items: [
+
+      
       {
         type: Schema.Types.ObjectId,
         ref: "Item",
