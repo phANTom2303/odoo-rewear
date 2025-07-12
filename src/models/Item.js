@@ -24,6 +24,7 @@ const ItemSchema = new Schema(
       required: true,
       validate: {
         validator: function (array) {
+          
           return array.length > 0;
         },
         message: "At least one image is required",
