@@ -3,37 +3,37 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { User, Menu, X, Leaf } from "lucide-react"
-import { supabase } from "@/lib/supabase"
-import { signOut } from "@/lib/auth"
+// import { supabase } from "@/lib/supabase"
+// import { signOut } from "@/lib/auth"
 import { useRouter } from "next/navigation"
 
 export default function Header() {
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const router = useRouter()
 
-  useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      setUser(user)
-    }
-    getUser()
+  // useEffect(() => {
+  //   const getUser = async () => {
+  //     const {
+  //       data: { user },
+  //     } = await supabase.auth.getUser()
+  //     setUser(user)
+  //   }
+  //   getUser()
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null)
-    })
+  //   const {
+  //     data: { subscription },
+  //   } = supabase.auth.onAuthStateChange((event, session) => {
+  //     setUser(session?.user ?? null)
+  //   })
 
-    return () => subscription.unsubscribe()
-  }, [])
+  //   return () => subscription.unsubscribe()
+  // }, [])
 
-  const handleSignOut = async () => {
-    await signOut()
-    router.push("/")
-  }
+  // const handleSignOut = async () => {
+  //   await signOut()
+  //   router.push("/")
+  // }
 
   return (
     <header className="bg-white shadow-sm border-b border-neutral-200">
@@ -49,7 +49,7 @@ export default function Header() {
             <Link href="/browse" className="text-neutral-600 hover:text-primary-600 transition-colors">
               Browse Items
             </Link>
-            {user && (
+            {/* {user && (
               <>
                 <Link href="/dashboard" className="text-neutral-600 hover:text-primary-600 transition-colors">
                   Dashboard
@@ -58,12 +58,12 @@ export default function Header() {
                   List Item
                 </Link>
               </>
-            )}
+            )} */}
           </nav>
 
           {/* User Menu */}
           <div className="hidden md:flex items-center space-x-4">
-            {user ? (
+            {/* {user ? (
               <div className="flex items-center space-x-4">
                 <Link href="/dashboard" className="flex items-center space-x-2 text-neutral-600 hover:text-primary-600">
                   <User className="h-5 w-5" />
@@ -82,7 +82,7 @@ export default function Header() {
                   Sign Up
                 </Link>
               </div>
-            )}
+            )} */}
           </div>
 
           {/* Mobile menu button */}
@@ -101,7 +101,7 @@ export default function Header() {
               <Link href="/browse" className="text-neutral-600 hover:text-primary-600 transition-colors">
                 Browse Items
               </Link>
-              {user ? (
+              {/* {user ? (
                 <>
                   <Link href="/dashboard" className="text-neutral-600 hover:text-primary-600 transition-colors">
                     Dashboard
@@ -125,7 +125,7 @@ export default function Header() {
                     Sign Up
                   </Link>
                 </>
-              )}
+              )} */}
             </div>
           </div>
         )}
