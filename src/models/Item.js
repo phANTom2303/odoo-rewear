@@ -99,6 +99,11 @@ const ItemSchema = new Schema(
       enum: ["men", "women", "unisex", "kids"],
       required: true,
     },
+    status: {
+      type: String,
+      enum: ["available", "in-swap-process", "redeemed"],
+      default: "available",
+    },
   },
   {
     timestamps: true,
