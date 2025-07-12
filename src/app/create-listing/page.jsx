@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Plus, X, Upload } from "lucide-react";
+import { createItem } from "../../actions/item-actions";
 
 export default function CreateListing() {
   const router = useRouter();
@@ -55,11 +56,30 @@ export default function CreateListing() {
     setIsSubmitting(true);
 
     try {
-      console.log("Form submitted:", formData);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      alert("Listing created successfully!");
+      const result = await createItem(formData);
+      
+      if (result.success) {
+        alert('Listing created successfully!');
+        
+        // Reset form after successful submission
+        setFormData({
+          name: "",
+          description: "",
+          cost: "",
+          images: [],
+          condition: "good",
+          tags: [],
+          size: "",
+          category: "",
+        });
+        
+        // Optionally redirect to the new item or listings page
+        // router.push(`/items/${result.item.id}`);
+        router.push('/dashboard');
+      }
     } catch (error) {
       console.error("Error creating listing:", error);
+      alert(`Error creating listing: ${error.message}`);
     } finally {
       setIsSubmitting(false);
     }
