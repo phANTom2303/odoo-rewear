@@ -1,39 +1,53 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { User, Menu, X, Leaf } from "lucide-react"
-// import { supabase } from "@/lib/supabase"
-// import { signOut } from "@/lib/auth"
-import { useRouter } from "next/navigation"
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { User, Menu, X, Leaf } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
-  const [user, setUser] = useState(null)
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const router = useRouter()
+  const [user, setUser] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
-  // useEffect(() => {
-  //   const getUser = async () => {
-  //     const {
-  //       data: { user },
-  //     } = await supabase.auth.getUser()
-  //     setUser(user)
-  //   }
-  //   getUser()
+  useEffect(() => {
+    // Check if user is logged in by looking at session storage
+    const checkUser = () => {
+      try {
+        const userData = sessionStorage.getItem("user");
+        if (userData) {
+          setUser(JSON.parse(userData));
+        }
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  //   const {
-  //     data: { subscription },
-  //   } = supabase.auth.onAuthStateChange((event, session) => {
-  //     setUser(session?.user ?? null)
-  //   })
+    checkUser();
 
-  //   return () => subscription.unsubscribe()
-  // }, [])
+    // Listen for storage changes (when user logs in/out in another tab)
+    const handleStorageChange = (e) => {
+      if (e.key === "user") {
+        if (e.newValue) {
+          setUser(JSON.parse(e.newValue));
+        } else {
+          setUser(null);
+        }
+      }
+    };
 
-  // const handleSignOut = async () => {
-  //   await signOut()
-  //   router.push("/")
-  // }
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
+  const handleSignOut = () => {
+    sessionStorage.removeItem("user");
+    setUser(null);
+    router.push("/");
+  };
 
   return (
     <header className="bg-white shadow-sm border-b border-neutral-200">
@@ -46,43 +60,85 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/browse" className="text-neutral-600 hover:text-primary-600 transition-colors">
+            <Link
+              href="/browse"
+              className="text-neutral-600 hover:text-primary-600 transition-colors"
+            >
               Browse Items
             </Link>
-            {/* {user && (
+            {user && (
               <>
-                <Link href="/dashboard" className="text-neutral-600 hover:text-primary-600 transition-colors">
+                <Link
+                  href="/dashboard"
+                  className="text-neutral-600 hover:text-primary-600 transition-colors"
+                >
                   Dashboard
                 </Link>
-                <Link href="/add-item" className="text-neutral-600 hover:text-primary-600 transition-colors">
+                <Link
+                  href="/create-listing"
+                  className="text-neutral-600 hover:text-primary-600 transition-colors"
+                >
                   List Item
                 </Link>
               </>
-            )} */}
+            )}
           </nav>
 
           {/* User Menu */}
           <div className="hidden md:flex items-center space-x-4">
-            {/* {user ? (
+            {loading ? (
+              <div className="w-8 h-8 bg-neutral-200 rounded-full animate-pulse"></div>
+            ) : user ? (
               <div className="flex items-center space-x-4">
-                <Link href="/dashboard" className="flex items-center space-x-2 text-neutral-600 hover:text-primary-600">
+                <div className="flex items-center space-x-2">
+                  {user.image ? (
+                    <img
+                      src={user.image}
+                      alt={user.name || "User"}
+                      className="w-8 h-8 rounded-full object-cover border-2 border-primary-200"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm font-medium">
+                        {user.name ? user.name.charAt(0).toUpperCase() : "U"}
+                      </span>
+                    </div>
+                  )}
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium text-neutral-900">
+                      {user.name}
+                    </span>
+                    <span className="text-xs text-neutral-500">
+                      {user.points} points
+                    </span>
+                  </div>
+                </div>
+                <Link
+                  href="/dashboard"
+                  className="text-neutral-600 hover:text-primary-600 transition-colors"
+                >
                   <User className="h-5 w-5" />
-                  <span>Profile</span>
                 </Link>
-                <button onClick={handleSignOut} className="text-neutral-600 hover:text-primary-600 transition-colors">
+                <button
+                  onClick={handleSignOut}
+                  className="text-neutral-600 hover:text-primary-600 transition-colors text-sm"
+                >
                   Sign Out
                 </button>
               </div>
             ) : (
               <div className="flex items-center space-x-4">
-                <Link href="/auth/login" className="text-neutral-600 hover:text-primary-600 transition-colors">
+                {/* <Link
+                  href="/login"
+                  className="text-neutral-600 hover:text-primary-600 transition-colors"
+                >
+                  Sign In
+                </Link> */}
+                <Link href="/login" className="btn-primary">
                   Sign In
                 </Link>
-                <Link href="/auth/signup" className="btn-primary">
-                  Sign Up
-                </Link>
               </div>
-            )} */}
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -90,7 +146,11 @@ export default function Header() {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="md:hidden p-2 rounded-md text-neutral-600 hover:text-primary-600"
           >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {isMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
           </button>
         </div>
 
@@ -98,15 +158,49 @@ export default function Header() {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-neutral-200">
             <div className="flex flex-col space-y-4">
-              <Link href="/browse" className="text-neutral-600 hover:text-primary-600 transition-colors">
+              <Link
+                href="/browse"
+                className="text-neutral-600 hover:text-primary-600 transition-colors"
+              >
                 Browse Items
               </Link>
-              {/* {user ? (
+              {loading ? (
+                <div className="text-neutral-400">Loading...</div>
+              ) : user ? (
                 <>
-                  <Link href="/dashboard" className="text-neutral-600 hover:text-primary-600 transition-colors">
+                  <div className="flex items-center space-x-3 py-2">
+                    {user.image ? (
+                      <img
+                        src={user.image}
+                        alt={user.name || "User"}
+                        className="w-10 h-10 rounded-full object-cover border-2 border-primary-200"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center">
+                        <span className="text-white text-lg font-medium">
+                          {user.name ? user.name.charAt(0).toUpperCase() : "U"}
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium text-neutral-900">
+                        {user.name}
+                      </span>
+                      <span className="text-xs text-neutral-500">
+                        {user.points} points
+                      </span>
+                    </div>
+                  </div>
+                  <Link
+                    href="/dashboard"
+                    className="text-neutral-600 hover:text-primary-600 transition-colors"
+                  >
                     Dashboard
                   </Link>
-                  <Link href="/add-item" className="text-neutral-600 hover:text-primary-600 transition-colors">
+                  <Link
+                    href="/create-listing"
+                    className="text-neutral-600 hover:text-primary-600 transition-colors"
+                  >
                     List Item
                   </Link>
                   <button
@@ -118,18 +212,24 @@ export default function Header() {
                 </>
               ) : (
                 <>
-                  <Link href="/auth/login" className="text-neutral-600 hover:text-primary-600 transition-colors">
+                  {/* <Link
+                    href="/login"
+                    className="text-neutral-600 hover:text-primary-600 transition-colors"
+                  >
+                    Sign In
+                  </Link> */}
+                  <Link
+                    href="/login"
+                    className="btn-primary inline-block text-center"
+                  >
                     Sign In
                   </Link>
-                  <Link href="/auth/signup" className="btn-primary inline-block text-center">
-                    Sign Up
-                  </Link>
                 </>
-              )} */}
+              )}
             </div>
           </div>
         )}
       </div>
     </header>
-  )
+  );
 }
