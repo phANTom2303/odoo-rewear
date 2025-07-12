@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { User, Plus, Package, ArrowUpDown, Award, Settings } from "lucide-react"
+import { User, Plus, Package, ArrowUpDown, Award } from "lucide-react"
 import Header from "../../components/header"
-import { supabase } from "../../lib/supabase"
 
 export default function DashboardPage() {
   const [userItems, setUserItems] = useState<any[]>([])
@@ -13,37 +12,21 @@ export default function DashboardPage() {
   const router = useRouter()
 
   useEffect(() => {
-    const loadUserData = async () => {
+    const fetchData = async () => {
       try {
-        // Load all items (not just user's)
-        const { data: items } = await supabase
-          .from("items")
-          .select("*")
-          .order("created_at", { ascending: false })
-
-        setUserItems(items || [])
-
-        // Load all swaps (not just user's)
-        const { data: userSwaps } = await supabase
-          .from("swaps")
-          .select(`
-            *,
-            items (title, images),
-            profiles!swaps_requester_id_fkey (username),
-            profiles!swaps_owner_id_fkey (username)
-          `)
-          .order("created_at", { ascending: false })
-
-        setSwaps(userSwaps || [])
+        const res = await fetch("/api/dashboard")
+        const data = await res.json()
+        setUserItems(data.items || [])
+        setSwaps(data.swaps || [])
       } catch (error) {
-        console.error("Error loading data:", error)
+        console.error("Failed to load dashboard:", error)
       } finally {
         setLoading(false)
       }
     }
 
-    loadUserData()
-  }, [router])
+    fetchData()
+  }, [])
 
   if (loading) {
     return (
@@ -62,7 +45,6 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-neutral-50">
       <Header />
-
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         {/* Profile Header */}
         <div className="card mb-8">
@@ -88,7 +70,7 @@ export default function DashboardPage() {
 
         {/* Quick Actions */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <button onClick={() => router.push("/add-item")} className="card hover:shadow-md transition-shadow text-left">
+          <button onClick={() => router.push("/create-listing")} className="card hover:shadow-md transition-shadow text-left">
             <div className="flex items-center space-x-4">
               <div className="bg-primary-100 w-12 h-12 rounded-lg flex items-center justify-center">
                 <Plus className="h-6 w-6 text-primary-600" />
@@ -130,7 +112,7 @@ export default function DashboardPage() {
           <div className="card">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold text-neutral-900">Listings</h2>
-              <button onClick={() => router.push("/add-item")} className="btn-primary text-sm">
+              <button onClick={() => router.push("/create-listing")} className="btn-primary text-sm">
                 Add Item
               </button>
             </div>
@@ -139,14 +121,14 @@ export default function DashboardPage() {
               <div className="text-center py-8">
                 <Package className="h-12 w-12 text-neutral-400 mx-auto mb-4" />
                 <p className="text-neutral-600 mb-4">No items listed yet</p>
-                <button onClick={() => router.push("/add-item")} className="btn-primary">
+                <button onClick={() => router.push("/create-listing")} className="btn-primary">
                   List Your First Item
                 </button>
               </div>
             ) : (
               <div className="space-y-4">
                 {userItems.slice(0, 3).map((item) => (
-                  <div key={item.id} className="flex items-center space-x-4 p-3 border border-neutral-200 rounded-lg">
+                  <div key={item._id} className="flex items-center space-x-4 p-3 border border-neutral-200 rounded-lg">
                     <img
                       src={item.images?.[0] || "/placeholder.svg?height=60&width=60"}
                       alt={item.title}
@@ -193,19 +175,17 @@ export default function DashboardPage() {
                     />
                     <div className="flex-1">
                       <h3 className="font-medium text-neutral-900">{swap.items?.title}</h3>
-                      <p className="text-sm text-neutral-600">
-                        Swap between users
-                      </p>
+                      <p className="text-sm text-neutral-600">Swap between users</p>
                     </div>
                     <span
                       className={`text-sm px-2 py-1 rounded-full ${
                         swap.status === "pending"
                           ? "bg-yellow-100 text-yellow-800"
                           : swap.status === "accepted"
-                            ? "bg-green-100 text-green-800"
-                            : swap.status === "declined"
-                              ? "bg-red-100 text-red-800"
-                              : "bg-blue-100 text-blue-800"
+                          ? "bg-green-100 text-green-800"
+                          : swap.status === "declined"
+                          ? "bg-red-100 text-red-800"
+                          : "bg-blue-100 text-blue-800"
                       }`}
                     >
                       {swap.status}

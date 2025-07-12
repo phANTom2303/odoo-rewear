@@ -19,11 +19,13 @@ const ItemSchema = new Schema(
       required: true,
       min: 0,
     },
-    images: {
+    images: { 
+      
       type: [String],
       required: true,
       validate: {
         validator: function (array) {
+
           return array.length > 0;
         },
         message: "At least one image is required",

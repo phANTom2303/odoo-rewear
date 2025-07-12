@@ -4,6 +4,11 @@ const UserSchema = new Schema(
   {
     name: String,
     email: { type: String, unique: true },
+    password: {
+      type: String,
+      required: true,
+      minlength: 6,
+    },
     image: String,
     userType: {
       type: String,
@@ -16,6 +21,8 @@ const UserSchema = new Schema(
       min: 0,
     },
     items: [
+
+      
       {
         type: Schema.Types.ObjectId,
         ref: "Item",
