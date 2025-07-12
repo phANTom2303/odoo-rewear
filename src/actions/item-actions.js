@@ -1,20 +1,7 @@
 "use server";
 
-import mongoose from "mongoose";
+import connectDB from "../lib/mongodb";
 import Item from "../models/Item";
-
-const MONGODB_URI = process.env.MONGODB_URI;
-
-async function connectDB() {
-  if (mongoose.connection.readyState === 0) {
-    try {
-      await mongoose.connect(MONGODB_URI);
-    } catch (error) {
-      console.error("Error connecting to MongoDB Database:", error);
-      throw error;
-    }
-  }
-}
 
 export async function createItem(formData) {
   try {
