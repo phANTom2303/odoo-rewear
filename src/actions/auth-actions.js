@@ -1,12 +1,17 @@
 "use server";
 
 import { signIn } from "../utils/auth";
+import { redirect } from "next/navigation";
 
 export async function signInAsCustomer() {
   try {
-    // Sign in with Google and pass the intended user type
     await signIn("google", { redirectTo: "/auth/callback?type=customer" });
   } catch (error) {
+    // Check if this is a redirect (which is expected behavior)
+    if (error.message === "NEXT_REDIRECT") {
+      // This is expected - NextAuth is redirecting to Google
+      throw error;
+    }
     console.error("Customer sign-in error:", error);
     throw error;
   }

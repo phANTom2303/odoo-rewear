@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { Upload, X } from "lucide-react"
-import Header from "../../components/header"
-import { supabase } from "../../lib/supabase"
-import { getCurrentUser } from "../../lib/auth"
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Upload, X } from "lucide-react";
+import Header from "../../components/header";
+import { supabase } from "../../lib/supabase";
+import { getCurrentUser } from "../../lib/auth";
 
 export default function AddItemPage() {
-  const [currentUser, setCurrentUser] = useState<any>(null)
-  const [loading, setLoading] = useState(false)
-  const [images, setImages] = useState<string[]>([])
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [images, setImages] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -22,62 +22,73 @@ export default function AddItemPage() {
     condition: "",
     tags: "",
     points_value: 50,
-  })
-  const router = useRouter()
+  });
+  const router = useRouter();
 
-  const categories = ["tops", "bottoms", "dresses", "outerwear", "accessories", "shoes"]
-  const conditions = ["new", "like_new", "good", "fair", "worn"]
-  const sizes = ["XS", "S", "M", "L", "XL", "XXL", "One Size"]
+  const categories = [
+    "tops",
+    "bottoms",
+    "dresses",
+    "outerwear",
+    "accessories",
+    "shoes",
+  ];
+  const conditions = ["new", "like_new", "good", "fair", "worn"];
+  const sizes = ["XS", "S", "M", "L", "XL", "XXL", "One Size"];
 
   useEffect(() => {
-    const checkUser = async () => {
-      const user = await getCurrentUser()
-      if (!user) {
-        router.push("/auth/login")
-        return
-      }
-      setCurrentUser(user)
-    }
-    checkUser()
-  }, [router])
+    // const checkUser = async () => {
+    //   const user = await getCurrentUser()
+    //   if (!user) {
+    //     router.push("/auth/login")
+    //     return
+    //   }
+    //   setCurrentUser(user)
+    // }
+    // checkUser()
+  }, [router]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
+    const files = e.target.files;
     if (files) {
       Array.from(files).forEach((file) => {
-        const reader = new FileReader()
+        const reader = new FileReader();
         reader.onload = (e) => {
           if (e.target?.result && images.length < 5) {
-            setImages((prev) => [...prev, e.target!.result as string])
+            setImages((prev) => [...prev, e.target!.result as string]);
           }
-        }
-        reader.readAsDataURL(file)
-      })
+        };
+        reader.readAsDataURL(file);
+      });
     }
-  }
+  };
 
   const removeImage = (index: number) => {
-    setImages((prev) => prev.filter((_, i) => i !== index))
-  }
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }))
-  }
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!currentUser) return
+    e.preventDefault();
+    if (!currentUser) return;
 
-    setLoading(true)
+    setLoading(true);
     try {
       const tagsArray = formData.tags
         .split(",")
         .map((tag) => tag.trim())
-        .filter((tag) => tag.length > 0)
+        .filter((tag) => tag.length > 0);
 
       const { error } = await supabase.from("items").insert({
         title: formData.title,
@@ -90,19 +101,21 @@ export default function AddItemPage() {
         images: images,
         points_value: formData.points_value,
         user_id: currentUser.id,
-      })
+      });
 
-      if (error) throw error
+      if (error) throw error;
 
-      alert("Item submitted for review! You'll be notified once it's approved.")
-      router.push("/dashboard")
+      alert(
+        "Item submitted for review! You'll be notified once it's approved."
+      );
+      router.push("/dashboard");
     } catch (error) {
-      console.error("Error adding item:", error)
-      alert("Failed to add item")
+      console.error("Error adding item:", error);
+      alert("Failed to add item");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   if (!currentUser) {
     return (
@@ -115,7 +128,7 @@ export default function AddItemPage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -124,15 +137,23 @@ export default function AddItemPage() {
 
       <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-neutral-900 mb-2">List New Item</h1>
-          <p className="text-neutral-600">Share your pre-loved fashion with the community</p>
+          <h1 className="text-3xl font-bold text-neutral-900 mb-2">
+            List New Item
+          </h1>
+          <p className="text-neutral-600">
+            Share your pre-loved fashion with the community
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Image Upload */}
           <div className="card">
-            <h2 className="text-xl font-semibold text-neutral-900 mb-4">Photos</h2>
-            <p className="text-neutral-600 mb-4">Add up to 5 photos of your item</p>
+            <h2 className="text-xl font-semibold text-neutral-900 mb-4">
+              Photos
+            </h2>
+            <p className="text-neutral-600 mb-4">
+              Add up to 5 photos of your item
+            </p>
 
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               {images.map((image, index) => (
@@ -156,7 +177,13 @@ export default function AddItemPage() {
                 <label className="border-2 border-dashed border-neutral-300 rounded-lg h-32 flex flex-col items-center justify-center cursor-pointer hover:border-primary-500 hover:bg-primary-50 transition-colors">
                   <Upload className="h-8 w-8 text-neutral-400 mb-2" />
                   <span className="text-sm text-neutral-600">Add Photo</span>
-                  <input type="file" accept="image/*" multiple onChange={handleImageUpload} className="hidden" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
                 </label>
               )}
             </div>
@@ -164,11 +191,16 @@ export default function AddItemPage() {
 
           {/* Basic Information */}
           <div className="card">
-            <h2 className="text-xl font-semibold text-neutral-900 mb-4">Basic Information</h2>
+            <h2 className="text-xl font-semibold text-neutral-900 mb-4">
+              Basic Information
+            </h2>
 
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="title" className="block text-sm font-medium text-neutral-700 mb-1">
+                <label
+                  htmlFor="title"
+                  className="block text-sm font-medium text-neutral-700 mb-1"
+                >
                   Title *
                 </label>
                 <input
@@ -184,7 +216,10 @@ export default function AddItemPage() {
               </div>
 
               <div>
-                <label htmlFor="category" className="block text-sm font-medium text-neutral-700 mb-1">
+                <label
+                  htmlFor="category"
+                  className="block text-sm font-medium text-neutral-700 mb-1"
+                >
                   Category *
                 </label>
                 <select
@@ -205,7 +240,10 @@ export default function AddItemPage() {
               </div>
 
               <div>
-                <label htmlFor="type" className="block text-sm font-medium text-neutral-700 mb-1">
+                <label
+                  htmlFor="type"
+                  className="block text-sm font-medium text-neutral-700 mb-1"
+                >
                   Type *
                 </label>
                 <input
@@ -221,7 +259,10 @@ export default function AddItemPage() {
               </div>
 
               <div>
-                <label htmlFor="size" className="block text-sm font-medium text-neutral-700 mb-1">
+                <label
+                  htmlFor="size"
+                  className="block text-sm font-medium text-neutral-700 mb-1"
+                >
                   Size *
                 </label>
                 <select
@@ -242,7 +283,10 @@ export default function AddItemPage() {
               </div>
 
               <div>
-                <label htmlFor="condition" className="block text-sm font-medium text-neutral-700 mb-1">
+                <label
+                  htmlFor="condition"
+                  className="block text-sm font-medium text-neutral-700 mb-1"
+                >
                   Condition *
                 </label>
                 <select
@@ -256,14 +300,18 @@ export default function AddItemPage() {
                   <option value="">Select condition</option>
                   {conditions.map((condition) => (
                     <option key={condition} value={condition}>
-                      {condition.replace("_", " ").charAt(0).toUpperCase() + condition.replace("_", " ").slice(1)}
+                      {condition.replace("_", " ").charAt(0).toUpperCase() +
+                        condition.replace("_", " ").slice(1)}
                     </option>
                   ))}
                 </select>
               </div>
 
               <div>
-                <label htmlFor="points_value" className="block text-sm font-medium text-neutral-700 mb-1">
+                <label
+                  htmlFor="points_value"
+                  className="block text-sm font-medium text-neutral-700 mb-1"
+                >
                   Points Value
                 </label>
                 <input
@@ -276,12 +324,17 @@ export default function AddItemPage() {
                   onChange={handleInputChange}
                   className="input-field"
                 />
-                <p className="text-sm text-neutral-500 mt-1">Suggested: 50-100 points</p>
+                <p className="text-sm text-neutral-500 mt-1">
+                  Suggested: 50-100 points
+                </p>
               </div>
             </div>
 
             <div className="mt-6">
-              <label htmlFor="description" className="block text-sm font-medium text-neutral-700 mb-1">
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-neutral-700 mb-1"
+              >
                 Description *
               </label>
               <textarea
@@ -297,7 +350,10 @@ export default function AddItemPage() {
             </div>
 
             <div className="mt-6">
-              <label htmlFor="tags" className="block text-sm font-medium text-neutral-700 mb-1">
+              <label
+                htmlFor="tags"
+                className="block text-sm font-medium text-neutral-700 mb-1"
+              >
                 Tags
               </label>
               <input
@@ -309,13 +365,19 @@ export default function AddItemPage() {
                 className="input-field"
                 placeholder="vintage, casual, summer, designer (separate with commas)"
               />
-              <p className="text-sm text-neutral-500 mt-1">Add tags to help others find your item</p>
+              <p className="text-sm text-neutral-500 mt-1">
+                Add tags to help others find your item
+              </p>
             </div>
           </div>
 
           {/* Submit */}
           <div className="flex justify-end space-x-4">
-            <button type="button" onClick={() => router.back()} className="btn-outline">
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="btn-outline"
+            >
               Cancel
             </button>
             <button
@@ -329,5 +391,5 @@ export default function AddItemPage() {
         </form>
       </div>
     </div>
-  )
+  );
 }

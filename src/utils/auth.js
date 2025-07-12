@@ -16,8 +16,13 @@ async function connectDB() {
   }
 }
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [Google],
+const authConfig = NextAuth({
+  providers: [
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+    }),
+  ],
   callbacks: {
     async signIn({ user }) {
       try {
@@ -59,3 +64,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
 });
+
+export const handlers = authConfig.handlers;
+export const signIn = authConfig.signIn;
+export const signOut = authConfig.signOut;
+export const auth = authConfig.auth;
