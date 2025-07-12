@@ -6,7 +6,6 @@ import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Leaf, Eye, EyeOff } from "lucide-react"
-import { signIn } from "@/lib/auth"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -22,7 +21,7 @@ export default function LoginPage() {
     setError("")
 
     try {
-      await signIn(email, password)
+      // await signIn(email, password)
       router.push("/dashboard")
     } catch (err: any) {
       setError(err.message || "An error occurred during sign in")
