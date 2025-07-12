@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 import { Upload, X } from "lucide-react"
 import Header from "../../components/header"
 import { supabase } from "../../lib/supabase"
-//import { getCurrentUser } from "../../lib/auth"
+import { getCurrentUser } from "../../lib/auth"
 
 export default function AddItemPage() {
   const [currentUser, setCurrentUser] = useState<any>(null)
